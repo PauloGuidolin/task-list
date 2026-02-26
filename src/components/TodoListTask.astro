@@ -1,0 +1,128 @@
+---
+const { tasks } = Astro.props;
+---
+
+<div class="w-full mt-8 space-y-4">
+    {
+        tasks.map(
+            (
+                task: any, // Solución al error de TypeScript
+            ) => (
+                <div class="group bg-[#1c1c1e] border border-white/5 p-4 rounded-2xl flex items-center justify-between hover:border-indigo-500/50 transition-all shadow-xl">
+                    <div>
+                        <p class="text-slate-200 text-lg ml-2">{task.title}</p>
+                        <p class="ml-2 text-white/20">Estado: {task.status}</p>
+                        <p class="ml-2 text-white/40">
+                            Fecha:{" "}
+                            {new Date(task.createdAt).toLocaleDateString(
+                                "es-ES",
+                            )}
+                        </p>
+
+                        <form method="POST" class="mt-2" >
+                            <input type="hidden" name="id" value={task._id} />
+                            <button
+                                name="action"
+                                value="complete"
+                                class="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 rounded-lg text-sm font-medium transition-all"
+                            >
+                                Completar
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="flex gap-2 flex-col justify-center items-center">
+                        <button
+                            onclick={`document.getElementById('modal-${task._id}').showModal()`}
+                            class="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 rounded-lg text-sm font-medium transition-all"
+                        >
+                            Editar
+                        </button>
+
+                        <form method="POST" class="m-0">
+                            <input type="hidden" name="id" value={task._id} />
+                            <button
+                                name="action"
+                                value="delete"
+                                class="px-4 py-2 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 rounded-lg text-sm font-medium transition-all"
+                            >
+                                Eliminar
+                            </button>
+                        </form>
+                    </div>
+
+                    <dialog
+                        id={`modal-${task._id}`}
+                        class="fixed inset-0 m-auto bg-[#1c1c1e] border border-white/10 p-8 rounded-3xl backdrop:backdrop-blur-md text-white w-[90%] max-w-sm shadow-2xl focus:outline-none"
+                    >
+                        <div class="flex flex-col">
+                            <h3 class="text-xl font-bold mb-6 text-center">
+                                Editar Tarea
+                            </h3>
+
+                            <form method="POST" class="space-y-6">
+                                <input
+                                    type="hidden"
+                                    name="id"
+                                    value={task._id}
+                                />
+                                <input
+                                    type="hidden"
+                                    name="action"
+                                    value="update"
+                                />
+
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={task.title}
+                                    class="w-full bg-white/5 border border-white/10 rounded-xl p-4 outline-none focus:border-indigo-500 transition-all text-center text-lg"
+                                    required
+                                    autofocus
+                                />
+
+                                <div class="flex flex-col gap-2">
+                                    <button
+                                        type="submit"
+                                        class="w-full bg-indigo-600 py-3 rounded-xl font-bold hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/20"
+                                    >
+                                        Guardar Cambios
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onclick={`document.getElementById('modal-${task._id}').close()`}
+                                        class="w-full py-3 text-slate-500 hover:text-slate-300 transition-colors"
+                                    >
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </dialog>
+                </div>
+            ),
+        )
+    }
+</div>
+
+<style>
+    /* Animación suave para que aparezca desde el centro */
+    dialog[open] {
+        animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes zoom {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    dialog::backdrop {
+        background: rgba(0, 0, 0, 0.8);
+    }
+</style>

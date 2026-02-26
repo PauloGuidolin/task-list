@@ -1,0 +1,43 @@
+---
+import { taskController } from "../controllers/TaskController";
+import TodoForm from "../components/TodoForm.astro";
+import TodoListTask from "../components/TodoListTask.astro";
+import "../styles/global.css";
+
+
+// 1. PROCESAMIENTO: El controlador maneja la "petición" (POST) de forma autónoma
+const result = await taskController.handleRequest(Astro.request);
+
+// 2. REDIRECCIÓN: Si el controlador hizo su trabajo con éxito, refrescamos la página
+if (result?.success) {
+  return Astro.redirect("/");
+}
+
+// 3. DATOS: Pedimos las tareas para pintarlas en la interfaz
+const tasks = await taskController.getAll();
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Lista de Tareas - MongoDB & Astro</title>
+  </head>
+  <body class="bg-[#141414] text-white font-sans antialiased min-h-screen flex items-center">
+    <main class="flex flex-col items-center w-full max-w-md mx-auto p-10 border-1 rounded-xl m-20">
+      
+      <header class=" text-center">
+        <h1 class="text-4xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">
+          Lista de Tareas
+        </h1>
+        <p class="text-xs text-slate-500 uppercase tracking-[0.2em] mt-2">MongoDB & Astro</p>
+      </header>
+
+      {/* Componente para CREAR tareas */}
+      <TodoForm />
+
+      {/* Componente para LISTAR, EDITAR y BORRAR tareas */}
+      <TodoListTask tasks={tasks} />
+
+    </main>
+  </body>
+</html>
