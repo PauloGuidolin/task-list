@@ -4,7 +4,6 @@ import TodoForm from "../components/TodoForm.astro";
 import TodoListTask from "../components/TodoListTask.astro";
 import "../styles/global.css";
 
-
 // 1. PROCESAMIENTO: El controlador maneja la "petición" (POST) de forma autónoma
 const result = await taskController.handleRequest(Astro.request);
 
@@ -21,15 +20,26 @@ const tasks = await taskController.getAll();
   <head>
     <meta charset="utf-8" />
     <title>Lista de Tareas - MongoDB & Astro</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>"
+    />
   </head>
-  <body class="bg-[#141414] text-white font-sans antialiased min-h-screen flex items-center">
-    <main class="flex flex-col items-center w-full max-w-md mx-auto p-10 border-1 rounded-xl m-20">
-      
-      <header class=" text-center">
-        <h1 class="text-4xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500">
+  <body
+    class="bg-[#141414] text-white font-sans antialiased min-h-screen flex items-center"
+  >
+    <main
+      class="flex flex-col items-center w-full max-w-md mx-auto p-10 border-1 rounded-xl m-20"
+    >
+      <header class="text-center">
+        <h1
+          class="text-4xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-500"
+        >
           Lista de Tareas
         </h1>
-        <p class="text-xs text-slate-500 uppercase tracking-[0.2em] mt-2">MongoDB & Astro</p>
+        <p class="text-xs text-slate-500 uppercase tracking-[0.2em] mt-2">
+          MongoDB & Astro
+        </p>
       </header>
 
       {/* Componente para CREAR tareas */}
@@ -37,7 +47,6 @@ const tasks = await taskController.getAll();
 
       {/* Componente para LISTAR, EDITAR y BORRAR tareas */}
       <TodoListTask tasks={tasks} />
-
     </main>
   </body>
 </html>
